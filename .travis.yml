@@ -1,0 +1,16 @@
+language: python
+branches:
+  only:
+    - master
+services:
+  - docker
+
+install: skip
+
+before_script:
+  # prep Ubuntu VM
+  - pip install ansible jmespath docker
+  - 'echo $VAULTPW > /home/travis/build/ahuffman/ansible-fact-testing-containers/.vaultpw'
+
+script:
+  - /home/travis/build/ahuffman/ansible-fact-testing-containers/travis.sh

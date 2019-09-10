@@ -1,0 +1,22 @@
+---
+- name: "Build Testing Containers"
+  hosts: "localhost"
+  vars_files:
+    - "vars/secrets.yml"
+  tasks:
+    - name: "Login to Docker Hub"
+      docker_login:
+        username: "{{ docker_user }}"
+        password: "{{ docker_pass }}"
+
+    - name: "Build CentOS7 Testing Container"
+      shell: "cd /home/travis/build/ahuffman/ansible-fact-testing-containers/CentOS/7/; docker build . -t ahuffman/afcentos7:latest -t ahuffman/afcentos7:`git rev-parse HEAD`"
+
+    - name: "Push built CentOS7 Testing Container to Hub"
+      shell: "docker push ahuffman/afcentos7:latest; docker push ahuffman/afcentos7:`git rev-parse HEAD`"
+
+    - name: "Build Debian Testing Container"
+      shell: "cd /home/travis/build/ahuffman/ansible-fact-testing-containers/Debian/Bullseye; docker build . -t ahuffman/afbullseye -t ahuffman/afbullseye:`git rev-parse HEAD`"
+
+    - name: "Push build Debian Bullseye Testing Container to Hub"
+      shell: "docker push ahuffman/afbullseye:latest; docker push ahuffman/afbullseye:`git rev-parse HEAD`"
